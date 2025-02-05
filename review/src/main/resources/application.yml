@@ -5,9 +5,9 @@ spring:
   application:
     name: review-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/review
-    username: ws
-    password: 1234
+    url: jdbc:postgresql://host.docker.internal:5432/how_about_over_there
+    username: sunghun
+    password: 12345
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -21,17 +21,17 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/ # localhost
 
 cloud:
   aws:
     credentials:
-      accessKey: ${AWS_ACCESS_KEY}
-      secretKey: ${AWS_SECRET_KEY}
+      accessKey:
+      secretKey:
     region:
-      static: ${AWS_REGION}
+      static:
     s3:
-      bucket: ${AWS_S3_BUCKET}
+      bucket:
 
 management:
   endpoints:
