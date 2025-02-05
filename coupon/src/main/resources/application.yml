@@ -21,18 +21,18 @@ spring:
           batch_size: 1000
     #show-sql: true
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: kafka:9092 # localhost:39092 , kafka:9092
 
   data:
     redis:
-      host: redis
+      host: redis # localhost , redis
       port: 6379
       username: default
 
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-service:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/ # localhost , eureka-service
 
 management:
   endpoints:

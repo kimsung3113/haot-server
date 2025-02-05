@@ -6,7 +6,10 @@ spring:
   application:
    name: lodge-service
   datasource:
-     driver-class-name: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://host.docker.internal:5432/how_about_over_there
+    username: sunghun
+    password: 12345
   jpa:
      hibernate:
        ddl-auto: update
@@ -17,15 +20,15 @@ spring:
      show-sql: true
   data:
     redis:
-      host: localhost
-      port: 6389
+      host: redis # redis, localhost
+      port: 6379
       username: default
 
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/ #localhost, eureka-service
 
 management:
   endpoints:

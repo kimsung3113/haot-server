@@ -5,9 +5,9 @@ spring:
     name: payment-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/how_about_over_there
-    username:
-    password:
+    url: jdbc:postgresql://host.docker.internal:5432/how_about_over_there
+    username: sunghun
+    password: 12345
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,10 +20,10 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/
 portone:
   api:
-    secret:
+    secret: dsfsdf
 management:
   endpoints:
     web:

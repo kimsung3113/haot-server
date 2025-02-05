@@ -6,7 +6,7 @@ spring:
     web-application-type: reactive  # Spring 애플리케이션 리액티브 웹 애플리케이션으로 설정
   data:
     redis:
-      host: localhost
+      host: redis # redis , localhost
       port: 6379
       password: '0000'
   application:
@@ -178,7 +178,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/ # eureka-service , localhost
 
 
 jwt:
@@ -191,7 +191,7 @@ jwt:
 # contains-paths: 포함되어 있으면 필터링 X
 filter:
   bypass:
-    exact-paths: /api/v1/auth/login, /api/v1/auth/signup, /payment.html, /actuator/prometheus,
+    exact-paths: /api/v1/auth/login, /api/v1/auth/signup, /payment.html, /actuator/prometheus
     prefix-paths: /api/v1/auth
     contains-paths: /v3/api-docs, /swagger-ui
 

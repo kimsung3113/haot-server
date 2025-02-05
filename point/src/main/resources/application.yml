@@ -6,13 +6,13 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://host.docker.internal:5432/how_about_over_there
-    username:
-    password:
+    username: sunghun
+    password: 12345
   data:
     redis:
-      port:
-      host:
-      username:
+      port: 6379
+      host: redis
+      username: default
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,7 +25,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:19090/eureka/
+      defaultZone: http://eureka-service:19090/eureka/
 management:
   endpoints:
     web:
