@@ -11,7 +11,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     networks:
-      - how-about-over-there_msa-network
+      - haot-server_msa-network
 
   grafana:
     image: grafana/grafana:latest
@@ -28,7 +28,7 @@ services:
       - ./grafana-data:/var/lib/grafana
       #- ./grafana.ini:/etc/grafana/grafana.ini
     networks:
-      - how-about-over-there_msa-network
+      - haot-server_msa-network
 
   loki:
     image: grafana/loki:latest
@@ -39,7 +39,7 @@ services:
     volumes:
       - ./loki/loki-config.yml:/mnt/config/loki-config.yml
     networks:
-      - how-about-over-there_msa-network
+      - haot-server_msa-network
 
   zipkin:
     image: openzipkin/zipkin:latest
@@ -47,11 +47,11 @@ services:
     ports:
       - "9411:9411"
     networks:
-      - how-about-over-there_msa-network
+      - haot-server_msa-network
 
 volumes:
   grafana-data:
 
 networks:
-  how-about-over-there_msa-network:
+  haot-server_msa-network:
     external: true  # 이미 생성된 네트워크를 사용
