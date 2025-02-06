@@ -16,14 +16,18 @@ import com.haot.coupon.domain.model.enums.EventStatus;
 import com.haot.coupon.infrastructure.repository.CouponEventRepository;
 import com.haot.coupon.infrastructure.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Slf4j(topic = "AdminEventServiceImpl")
 @Service
 @RequiredArgsConstructor
 public class AdminEventServiceImpl implements AdminEventService {
@@ -83,9 +87,15 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         CouponEvent savedEvent = couponEventRepository.save(event);
 
-        if (coupon.checkPriorityCoupon()) {
-            redisRepository.save(savedEvent, coupon);
-        }
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                if (coupon.checkPriorityCoupon()) {
+                    log.info("선착순 쿠폰 : {} Redis 적용", coupon.getId());
+                    redisRepository.save(savedEvent, coupon);
+                }
+            }
+        });
 
         return eventMapper.toCreateResponse(savedEvent);
     }
