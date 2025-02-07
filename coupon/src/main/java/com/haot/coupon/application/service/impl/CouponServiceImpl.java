@@ -116,19 +116,12 @@ public class CouponServiceImpl implements CouponService {
     public ReservationVerifyResponse verify(String userId, FeignVerifyRequest request) {
 
         Coupon coupon = checkExistsCoupon(request.couponId());
-
         UserCoupon userCoupon = findUserCoupon(userId, coupon);
 
-        // reservationCoupon 테이블 체크
         checkReservedCouponAvailable(userCoupon);
-
-        // 쿠폰 상태가 USED인지 확인하고 에러 반환
         checkIfCouponUsed(userCoupon);
-
-        // 금액, 날짜 체크
         validateBeforeReservation(coupon, request);
 
-        //할인 정책에 따라 금액 계산
         double totalPrice = request.reservationPrice();
         double discountPrice = getDiscountedPrice(coupon, totalPrice);
 
@@ -172,10 +165,8 @@ public class CouponServiceImpl implements CouponService {
 
         UserCoupon userCoupon = reservationCoupon.getUserCoupon();
 
-        // Role이 User일때 userId 같은지 체크
-        validateUserAndRole(userId, role, userCoupon.getUserId());
 
-        // 선점 상태가 아닌 경우 에러 반환
+        validateUserAndRole(userId, role, userCoupon.getUserId());
         validateReservationPreemption(reservationCoupon);
 
         reservationCoupon.confirmReservationStatus(ReservationCouponStatus.ROLLBACK);
