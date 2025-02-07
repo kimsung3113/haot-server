@@ -11,7 +11,6 @@ import com.haot.coupon.common.exceptions.CustomCouponException;
 import com.haot.coupon.common.response.enums.ErrorCode;
 import com.haot.coupon.domain.model.Coupon;
 import com.haot.coupon.domain.model.CouponEvent;
-import com.haot.coupon.domain.model.enums.CouponType;
 import com.haot.coupon.domain.model.enums.EventStatus;
 import com.haot.coupon.infrastructure.repository.CouponEventRepository;
 import com.haot.coupon.infrastructure.repository.CouponRepository;
@@ -46,47 +45,11 @@ public class AdminEventServiceImpl implements AdminEventService {
     @Override
     public EventCreateResponse create(EventCreateRequest eventCreateRequest) {
 
-        // Business Logic
+        isEventDurationLessThanOneDay(eventCreateRequest.eventStartDate(), eventCreateRequest.eventEndDate());
+        Coupon coupon = validateCoupon(eventCreateRequest);
 
-        isEventDurationLessThanOneDay(eventCreateRequest);
-
-        // event 끝 날짜가 쿠폰 만료 날짜보다 전이어야 된다.
-        Coupon coupon = couponRepository.findByIdAndExpiredDateIsAfterAndIsDeletedFalse(eventCreateRequest.couponId(),
-                        eventCreateRequest.eventEndDate())
-                .orElseThrow(() -> new CustomCouponException(ErrorCode.COUPON_NOT_FOUND));
-
-
-        // 이벤트에 같은 선착순 쿠폰이 설정되면 안된다, 무제한은 가능하게!
-        if (CouponType.PRIORITY == coupon.getType() && couponEventRepository.existsByCouponIdAndIsDeletedFalse(coupon.getId())) {
-            throw new CustomCouponException(ErrorCode.EXIST_PRIORITY_COUPON_EVENTS);
-        }
-
-        // 무제한은 이벤트들 안에서 여러번 같은 쿠폰을 쓸 수 있게 한다.
-        if (CouponType.UNLIMITED == coupon.getType()) {
-
-            List<CouponEvent> promotions = couponEventRepository
-                    .findByCouponIdAndEventEndDateIsAfterAndIsDeletedFalse(coupon.getId(), LocalDateTime.now())
-                    .stream()
-                    .peek(couponEvent -> {
-                        if (couponEvent.getEventStatus() == EventStatus.DEFAULT) {
-                            throw new CustomCouponException(ErrorCode.EXIST_UNLIMITED_COUPON_EVENTS);
-                        }
-                    })
-                    .toList();
-
-        }
-
-        CouponEvent savedEvent = couponEventRepository.save(eventMapper.toEntity(eventCreateRequest, coupon));
-
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                if (coupon.checkPriorityCoupon()) {
-                    log.info("선착순 쿠폰 이벤트: {} Redis 저장", coupon.getId());
-                    redisRepository.save(savedEvent, coupon);
-                }
-            }
-        });
+        validateEventWithCoupon(coupon);
+        CouponEvent savedEvent = saveEventWithTransactionHandling(eventCreateRequest, coupon);
 
         return eventMapper.toCreateResponse(savedEvent);
     }
@@ -126,11 +89,64 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
     }
 
-    private void isEventDurationLessThanOneDay(EventCreateRequest eventCreateRequest){
-        if (!eventCreateRequest.eventStartDate().plusDays(1).isBefore(eventCreateRequest.eventEndDate())) {
+    private void isEventDurationLessThanOneDay(LocalDateTime startDate, LocalDateTime endDate) {
+        if (!startDate.plusDays(1).isBefore(endDate)) {
             throw new CustomCouponException(ErrorCode.INSUFFICIENT_DATE_DIFFERENCE);
         }
     }
+
+    private Coupon validateCoupon(EventCreateRequest request) {
+        Coupon coupon = couponRepository.findByIdAndIsDeletedFalse(request.couponId())
+                .orElseThrow(() -> new CustomCouponException(ErrorCode.COUPON_NOT_FOUND));
+
+        if (!request.eventEndDate().isBefore(coupon.getExpiredDate())) {
+            throw new CustomCouponException(ErrorCode.INVALID_EVENT_END_DATE);
+        }
+
+        return coupon;
+    }
+
+    private void validateEventWithCoupon(Coupon coupon) {
+        if (coupon.checkPriorityCoupon()) {
+            if(existsEventPriorityCoupon(coupon.getId())) {
+                throw new CustomCouponException(ErrorCode.EXIST_PRIORITY_COUPON_EVENTS);
+            }
+        }else{
+            List<CouponEvent> promotions =
+            couponEventRepository.findByCouponIdAndEventStatusAndIsDeletedFalse(coupon.getId(), EventStatus.DEFAULT);
+
+            if(!promotions.isEmpty()){
+                throw new CustomCouponException(ErrorCode.EXIST_UNLIMITED_COUPON_EVENTS);
+            }
+        }
+    }
+
+    private boolean existsEventPriorityCoupon(String couponId) {
+        return couponEventRepository.existsByCouponIdAndIsDeletedFalse(couponId);
+    }
+
+
+    private CouponEvent saveEventWithTransactionHandling(EventCreateRequest request, Coupon coupon) {
+        CouponEvent savedEvent = couponEventRepository.save(eventMapper.toEntity(request, coupon));
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                handlePostCommitRedisSave(coupon, savedEvent);
+            }
+        });
+
+        return savedEvent;
+    }
+
+
+    private void handlePostCommitRedisSave(Coupon coupon, CouponEvent savedEvent) {
+        if (coupon.checkPriorityCoupon()) {
+            log.info("선착순 쿠폰 이벤트: {} Redis 저장", coupon.getId());
+            redisRepository.save(savedEvent, coupon);
+        }
+    }
+
 
     // 쿠폰 삭제
     private void deleteCoupon(Coupon coupon, String userId) {
