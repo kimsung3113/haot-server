@@ -15,24 +15,24 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        #format_sql: true
-        #use_sql_comments: true
+        format_sql: true
+        use_sql_comments: true
         jdbc:
           batch_size: 1000
-    #show-sql: true
+    show-sql: true
   kafka:
-    bootstrap-servers: kafka:9092 # localhost:39092 , kafka:9092
+    bootstrap-servers: localhost:39092 # localhost:39092 , kafka:9092
 
   data:
     redis:
-      host: redis # localhost , redis
+      host: localhost # localhost , redis
       port: 6379
-      username: default
+      password: '0000'
 
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-service:19090/eureka/ # localhost , eureka-service
+      defaultZone: http://localhost:19090/eureka/ # localhost , eureka-service
 
 management:
   endpoints:
@@ -44,3 +44,6 @@ management:
       enabled: true
     health:
       show-details: never
+
+gateway:
+  url: http://gateway-service:19091

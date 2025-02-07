@@ -61,7 +61,7 @@ public class Coupon extends BaseEntity {
     }
 
     public boolean checkPriorityCoupon(){
-        return this.totalQuantity != -1;
+        return this.totalQuantity != -1 && this.type == CouponType.PRIORITY;
     }
 
     public boolean checkDiscountPolicy(){

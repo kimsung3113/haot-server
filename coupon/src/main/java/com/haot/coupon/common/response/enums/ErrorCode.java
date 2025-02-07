@@ -45,14 +45,12 @@ public enum ErrorCode implements ResCodeIfs {
     MODIFY_EVENT_HAS_NO_PARAMETER(HttpStatus.NOT_FOUND, "4024", "이벤트 수정 API 요청시 적어도 하나의 필드를 제공해야 합니다. "),
     RESERVATION_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "4025", "ReservationCoupon not found."),
     RESERVATION_COUPON_NOT_PREEMPTED(HttpStatus.NOT_FOUND, "4026", "선점된 쿠폰이 아닙니다"),
-    EVENT_CANT_CREATED(HttpStatus.BAD_REQUEST, "4027", "현재 날짜가 이벤트 만료날짜 이후여서 이벤트 생성 불가 합니다."),
-    COUPON_NOT_MATCHED_WITH_EVENT(HttpStatus.BAD_REQUEST, "4028", "이벤트의 쿠폰과 파라미터의 쿠폰이 같지 않습니다."),
+    COUPON_NOT_MATCHED_WITH_EVENT(HttpStatus.BAD_REQUEST, "4027", "이벤트의 쿠폰과 파라미터의 쿠폰이 같지 않습니다."),
+    INVALID_EVENT_END_DATE(HttpStatus.BAD_REQUEST, "4028", "이벤트 종료 날짜가 적합하지 않습니다."),
 
 
     // event 조회 API Error
     INVALID_PARAMETERS_FOR_NON_ADMIN(HttpStatus.BAD_REQUEST, "4100", "User 권한을 가진 사용자가 요청 할 수 없는 파라미터 입니다."),
-
-
 
     // service common Error
     UNSUPPORTED_SORT_TYPE(HttpStatus.BAD_REQUEST, "4500", "지원하지 않는 정렬 방식입니다."),

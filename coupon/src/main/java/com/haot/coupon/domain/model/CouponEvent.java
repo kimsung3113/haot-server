@@ -42,18 +42,6 @@ public class CouponEvent extends BaseEntity {
     @Column(nullable = false)
     private EventStatus eventStatus;
 
-    public void updateExpiredEventStatus(){
-
-        LocalDateTime now = LocalDateTime.now();
-
-        if (now.isAfter(this.eventEndDate)) {
-            throw new CustomCouponException(ErrorCode.EVENT_CANT_CREATED);
-        } else {
-            this.eventStatus = EventStatus.DEFAULT;
-        }
-
-    }
-
     public void updateEventStatus(EventStatus eventStatus){
         this.eventStatus = eventStatus;
     }

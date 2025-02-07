@@ -21,8 +21,6 @@ public class AdminEventController implements AdminEventControllerDocs {
 
     private final AdminEventService adminEventService;
 
-    // TODO 로그인 된 admin만 가능하게
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @RoleCheck(Role.ADMIN)
