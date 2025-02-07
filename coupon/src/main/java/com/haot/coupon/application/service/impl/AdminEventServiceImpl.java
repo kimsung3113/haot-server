@@ -48,10 +48,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         // Business Logic
 
-        // eventEndDate이 eventStartDate보다 +1일 보다 후여야 한다.
-        if (!eventCreateRequest.eventStartDate().plusDays(1).isBefore(eventCreateRequest.eventEndDate())) {
-            throw new CustomCouponException(ErrorCode.INSUFFICIENT_DATE_DIFFERENCE);
-        }
+        isEventDurationLessThanOneDay(eventCreateRequest);
 
         // event 끝 날짜가 쿠폰 만료 날짜보다 전이어야 된다.
         Coupon coupon = couponRepository.findByIdAndExpiredDateIsAfterAndIsDeletedFalse(eventCreateRequest.couponId(),
@@ -79,19 +76,13 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         }
 
-        // mapper로 event 만든다.
-        CouponEvent event = eventMapper.toEntity(eventCreateRequest, coupon);
-
-        // 현재 시간으로 eventStatus update
-        event.updateExpiredEventStatus();
-
-        CouponEvent savedEvent = couponEventRepository.save(event);
+        CouponEvent savedEvent = couponEventRepository.save(eventMapper.toEntity(eventCreateRequest, coupon));
 
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
                 if (coupon.checkPriorityCoupon()) {
-                    log.info("선착순 쿠폰 : {} Redis 적용", coupon.getId());
+                    log.info("선착순 쿠폰 이벤트: {} Redis 저장", coupon.getId());
                     redisRepository.save(savedEvent, coupon);
                 }
             }
@@ -132,6 +123,12 @@ public class AdminEventServiceImpl implements AdminEventService {
         } else {
             // 이름, description 수정
             event.modifyEvent(request.eventName(), request.eventDescription());
+        }
+    }
+
+    private void isEventDurationLessThanOneDay(EventCreateRequest eventCreateRequest){
+        if (!eventCreateRequest.eventStartDate().plusDays(1).isBefore(eventCreateRequest.eventEndDate())) {
+            throw new CustomCouponException(ErrorCode.INSUFFICIENT_DATE_DIFFERENCE);
         }
     }
 
