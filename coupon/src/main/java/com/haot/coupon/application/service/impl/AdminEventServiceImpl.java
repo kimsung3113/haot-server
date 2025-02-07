@@ -49,9 +49,8 @@ public class AdminEventServiceImpl implements AdminEventService {
         Coupon coupon = validateCoupon(eventCreateRequest);
 
         validateEventWithCoupon(coupon);
-        CouponEvent savedEvent = saveEventWithTransactionHandling(eventCreateRequest, coupon);
 
-        return eventMapper.toCreateResponse(savedEvent);
+        return eventMapper.toCreateResponse(saveEventWithTransactionHandling(eventCreateRequest, coupon));
     }
 
     // 이벤트 수정 API, 문제가 생겼을때 확산 방지용 API or 이름, 설명 변경 API
