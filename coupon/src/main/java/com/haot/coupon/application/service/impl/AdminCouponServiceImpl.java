@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AdminCouponServiceImpl implements AdminCouponService {
@@ -27,10 +29,7 @@ public class AdminCouponServiceImpl implements AdminCouponService {
 
         // Business Logic TODO (아직 중복을 잡기 얘매한거 같다.)
 
-        // expiredDate가 availabledate +1일 보다 후여야 한다.
-        if (!request.couponAvailableDate().plusDays(1).isBefore(request.couponExpiredDate())) {
-            throw new CustomCouponException(ErrorCode.INSUFFICIENT_DATE_DIFFERENCE);
-        }
+        isCouponDurationLessThanOneDay(request.couponAvailableDate(), request.couponExpiredDate());
 
         DiscountPolicy discountPolicy = DiscountPolicy.checkDiscountPolicy(request.discountPolicy());
         CouponType couponType = CouponType.checkCouponType(request.couponType());
@@ -58,6 +57,12 @@ public class AdminCouponServiceImpl implements AdminCouponService {
         Coupon savedCoupon = couponRepository.save(couponMapper.toEntity(request));
 
         return couponMapper.responseId(savedCoupon.getId());
+    }
+
+    private void isCouponDurationLessThanOneDay(LocalDateTime availableDate, LocalDateTime expiredDate) {
+        if (!availableDate.plusDays(1).isBefore(expiredDate)) {
+            throw new CustomCouponException(ErrorCode.INSUFFICIENT_DATE_DIFFERENCE);
+        }
     }
 
     // 할인율 쿠폰일때 유효성 검사
