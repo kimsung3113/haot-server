@@ -21,6 +21,7 @@ public class CouponIssuedProducer implements CouponIssueProducer {
         kafkaTemplate.send(
                 MessageBuilder.withPayload(request)
                         .setHeader(KafkaHeaders.TOPIC, "coupon-issue-priority")
+                        .setHeader(KafkaHeaders.KEY, request.getCouponId())
                         .build())
         ;
     }

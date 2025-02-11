@@ -108,6 +108,7 @@ public class KafkaConfig {
         factory.setConsumerFactory(issueConsumerFactory());
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.setConcurrency(3);
 
         return factory;
     }
@@ -117,6 +118,14 @@ public class KafkaConfig {
     public NewTopic unlimitedIssueCouponTopic() {
         return TopicBuilder.name("coupon-issue-unlimited")
                 .partitions(5)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic priorityIssueCouponTopic() {
+        return TopicBuilder.name("coupon-issue-priority")
+                .partitions(3)
                 .replicas(1)
                 .build();
     }
