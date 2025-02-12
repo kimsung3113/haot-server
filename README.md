@@ -274,6 +274,8 @@
 
 [🐰 Kafka Consumer 역직렬화 문제](https://github.com/How-about-over-there/server/wiki/%5BTrouble-Shooting%5D-Kafka-Consumer-%EC%97%AD%EC%A7%81%EB%A0%AC%ED%99%94-%EB%AC%B8%EC%A0%9C)
 
+[🔥 Redis 역/직렬화 문제 해결 & 페이징 객체 캐싱 해결 과정](https://github.com/kimsung3113/haot-server/wiki/%5BTrouble-Shooting%5D-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%ED%8E%98%EC%9D%B4%EC%A7%95-%EA%B0%9D%EC%B2%B4-Redis-%EC%BA%90%EC%8B%B1-%EC%97%AD%EC%A7%81%EB%A0%AC%ED%99%94-%EB%AC%B8%EC%A0%9C-&-%EC%BA%90%EC%8B%B1-%EC%95%88%EB%90%98%EB%8A%94-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
+
 [🍀 Redis 역/직렬화 문제 해결 과정](https://github.com/How-about-over-there/server/wiki/%5BTrouble-Shooting%5D-Redis-%EC%97%AD-%EC%A7%81%EB%A0%AC%ED%99%94-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95)
 
 [🎀 Feign Client 통신 문제](https://github.com/How-about-over-there/server/wiki/%5BTrouble-Shooting%5D-Feign-Client-%ED%86%B5%EC%8B%A0-%EB%AC%B8%EC%A0%9C)
