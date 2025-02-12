@@ -78,36 +78,32 @@ public class KafkaConfig {
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, CouponIssueDto>>
     parallelKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CouponIssueDto> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(issueConsumerFactory());
-        factory.setBatchListener(true);
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
-        factory.setConcurrency(5);
-
-        return factory;
+        return createKafkaListenerContainerFactory(issueConsumerFactory(), 5);
     }
 
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, EventClosedDto>>
     kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, EventClosedDto> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        factory.setBatchListener(true);
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
-
-        return factory;
+        return createKafkaListenerContainerFactory(consumerFactory(), 0);
     }
 
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, CouponIssueDto>>
     priorityKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CouponIssueDto> factory =
+        return createKafkaListenerContainerFactory(issueConsumerFactory(), 3);
+    }
+
+    private <T> ConcurrentKafkaListenerContainerFactory<String, T>
+    createKafkaListenerContainerFactory(ConsumerFactory<String, T> consumerFactory, int concurrency) {
+        ConcurrentKafkaListenerContainerFactory<String, T> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(issueConsumerFactory());
+        factory.setConsumerFactory(consumerFactory);
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+
+        if (concurrency > 0) {
+            factory.setConcurrency(concurrency);
+        }
 
         return factory;
     }
@@ -117,6 +113,14 @@ public class KafkaConfig {
     public NewTopic unlimitedIssueCouponTopic() {
         return TopicBuilder.name("coupon-issue-unlimited")
                 .partitions(5)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic priorityIssueCouponTopic() {
+        return TopicBuilder.name("coupon-issue-priority")
+                .partitions(3)
                 .replicas(1)
                 .build();
     }

@@ -29,7 +29,6 @@ public class CouponIssuedConsumer implements CouponIssueConsumer {
             containerFactory = "priorityKafkaListenerContainerFactory")
     public void issuePriorityCouponListener(List<CouponIssueDto> requests,
                                             Acknowledgment acknowledgment) {
-        /*TODO 여기서 List로 받으면 어떻게 해야될까..? for문 해서 여기서 DLQ, DLT 쓰기 어려울듯.. 재시도, 에러처리 안하는 거로..?*/
         batchCommit(requests, acknowledgment);
     }
 
