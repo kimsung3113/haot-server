@@ -30,7 +30,7 @@ public class ValidExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.ERROR(ErrorCode.VALIDATION_EXCEPTION, errors));
+                .body(ApiResponse.error(ErrorCode.VALIDATION_EXCEPTION, errors));
     }
 
 }

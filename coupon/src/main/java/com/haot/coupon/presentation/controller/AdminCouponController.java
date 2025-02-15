@@ -25,7 +25,7 @@ public class AdminCouponController implements AdminCouponControllerDocs {
     @PostMapping
     @RoleCheck(Role.ADMIN)
     public ApiResponse<CouponCreateResponse> create(@Valid @RequestBody CouponCreateRequest request) {
-        return ApiResponse.SUCCESS(SuccessCode.CREATE_COUPON_SUCCESS, adminCouponService.create(request));
+        return ApiResponse.success(SuccessCode.CREATE_COUPON_SUCCESS, adminCouponService.create(request));
     }
 
     @ResponseStatus(HttpStatus.OK)

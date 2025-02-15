@@ -23,7 +23,7 @@ public class EventController implements com.haot.coupon.presentation.docs.EventC
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{eventId}")
     public ApiResponse<EventSearchResponse> getEvent(@PathVariable(value = "eventId") String eventId) {
-        return ApiResponse.SUCCESS(SuccessCode.GET_DETAIL_EVENT_SUCCESS, eventService.getEvent(eventId));
+        return ApiResponse.success(SuccessCode.GET_DETAIL_EVENT_SUCCESS, eventService.getEvent(eventId));
     }
 
 

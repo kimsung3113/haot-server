@@ -23,7 +23,7 @@ public interface CouponControllerDocs {
     ApiResponse<CouponSearchResponse> getCouponDetails(String couponId);
 
     @Operation(summary = "쿠폰 발급 API", description = "쿠폰 발급 API 입니다.")
-    ApiResponse<Void> customerIssueCoupon(String userId, CouponCustomerCreateRequest request);
+    ApiResponse<Void> customerIssueCoupon(/*String userId, */CouponCustomerCreateRequest request);
 
     @Operation(summary = "쿠폰 유효성 검사 API", description = "[Feign] 쿠폰 사용하기 전 유효성 검사 API 입니다.")
     ApiResponse<ReservationVerifyResponse> verify(String userId, FeignVerifyRequest request);
