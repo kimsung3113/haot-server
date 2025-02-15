@@ -32,7 +32,7 @@ public class EventController implements com.haot.coupon.presentation.docs.EventC
     public ApiResponse<PageResponse<EventSearchResponse>> searchEvent(@RequestHeader("X-User-Role") Role userRole,
                                                                       @ModelAttribute EventSearchRequest request,
                                                                       Pageable pageable) {
-        return ApiResponse.success(eventService.searchEvent(userRole, request, pageable));
+        return ApiResponse.success(SuccessCode.SEARCH_EVENT_SUCCESS, eventService.searchEvent(userRole, request, pageable));
     }
 
 

@@ -15,7 +15,7 @@ import java.util.Set;
 
 public interface CouponEventRepository extends JpaRepository<CouponEvent, String>, CouponEventCustomRepository {
 
-    boolean existsByCouponIdAndIsDeletedFalse(String CouponId);
+    boolean existsByCouponIdAndIsDeletedFalse(String couponId);
 
     List<CouponEvent> findByCouponIdAndEventStatusAndIsDeletedFalse(String id, EventStatus status);
 
