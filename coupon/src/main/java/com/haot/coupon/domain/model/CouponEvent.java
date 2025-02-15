@@ -1,7 +1,5 @@
 package com.haot.coupon.domain.model;
 
-import com.haot.coupon.common.exceptions.CustomCouponException;
-import com.haot.coupon.common.response.enums.ErrorCode;
 import com.haot.coupon.domain.model.enums.EventStatus;
 import com.haot.submodule.auditor.BaseEntity;
 import jakarta.persistence.*;

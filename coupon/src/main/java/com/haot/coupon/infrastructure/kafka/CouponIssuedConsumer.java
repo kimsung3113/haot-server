@@ -1,18 +1,12 @@
 package com.haot.coupon.infrastructure.kafka;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haot.coupon.application.cache.RedisRepository;
 import com.haot.coupon.application.dto.CouponIssueDto;
-import com.haot.coupon.application.dto.request.coupons.CouponCustomerCreateRequest;
 import com.haot.coupon.application.kafka.CouponIssueConsumer;
 import com.haot.coupon.application.service.CouponService;
-import com.haot.coupon.common.exceptions.CustomCouponException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
