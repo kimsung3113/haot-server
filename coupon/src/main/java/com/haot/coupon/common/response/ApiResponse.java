@@ -14,29 +14,31 @@ public record ApiResponse<T> (
         List<String> errorList,
         T data
 ) {
+    private static final String SUCCESS = "SUCCESS";
+    private static final String ERROR = "ERROR";
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>("4000",getSuccess(), "API 요청에 성공했습니다", data);
+        return new ApiResponse<>("4000", SUCCESS, "API 요청에 성공했습니다", data);
     }
 
     public static <T> ApiResponse<T> success(ResCodeIfs resCodeIfs, T data) {
-        return new ApiResponse<>(resCodeIfs.getCode(), getSuccess(), resCodeIfs.getMessage(), data);
+        return new ApiResponse<>(resCodeIfs.getCode(), SUCCESS, resCodeIfs.getMessage(), data);
     }
 
     public static ApiResponse<Void> success() {
-        return new ApiResponse<>("4000",getSuccess(), "API 요청에 성공했습니다",null);
+        return new ApiResponse<>("4000", SUCCESS, "API 요청에 성공했습니다",null);
     }
 
     public static ApiResponse<Void> success(ResCodeIfs resCodeIfs) {
-        return new ApiResponse<>(resCodeIfs.getCode(), getSuccess(), resCodeIfs.getMessage(),null);
+        return new ApiResponse<>(resCodeIfs.getCode(), SUCCESS, resCodeIfs.getMessage(),null);
     }
 
     public static ApiResponse<Object> error(ResCodeIfs resCodeIfs){
-        return new ApiResponse<>(resCodeIfs.getCode(), getError(), resCodeIfs.getMessage(), null, null);
+        return new ApiResponse<>(resCodeIfs.getCode(), ERROR, resCodeIfs.getMessage(), null, null);
     }
 
     public static ApiResponse<Object> error(ResCodeIfs resCodeIfs, List<String> errorList) {
-        return new ApiResponse<>(resCodeIfs.getCode(), getError(), resCodeIfs.getMessage(), errorList);
+        return new ApiResponse<>(resCodeIfs.getCode(), ERROR, resCodeIfs.getMessage(), errorList);
     }
 
     public ApiResponse(String statusCode, String status, String message, T data){
@@ -45,14 +47,6 @@ public record ApiResponse<T> (
 
     public ApiResponse(String statusCode, String status, String message, List<String> errorList){
         this(statusCode, status, message, errorList, null);
-    }
-
-    private static String getSuccess(){
-        return "SUCCESS";
-    }
-
-    private static String getError(){
-        return "ERROR";
     }
 
 }
