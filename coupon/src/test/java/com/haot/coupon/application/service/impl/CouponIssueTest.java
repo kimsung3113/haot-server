@@ -69,7 +69,7 @@ class CouponIssueTest {
         when(couponEventRepository.findByIdAndEventStatusAndIsDeleteFalse(eq(event.getId()), any()))
                 .thenReturn(Optional.of(event));
 
-        // TODO 왜 2번째 매개변수인 couponid만 eq를 했을때 에러가 나는 이유는..?
+        // TODO 왜 2번째 매개변수인 couponid만 coupon.getId()로 eq를 했을때 에러가 나는 이유는..?
         // Redis Mock: LuaScript 호출 결과 설정
         when(redisRepository.issuePriorityCoupon(eq(event.getId()), anyString(), eq(userId), any()))
                 .thenReturn(CouponIssueRedisCode.SUCCESS);
