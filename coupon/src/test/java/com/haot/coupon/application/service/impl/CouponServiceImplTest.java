@@ -10,6 +10,8 @@ import com.haot.coupon.application.kafka.CouponIssueProducer;
 import com.haot.coupon.application.mapper.CouponMapper;
 import com.haot.coupon.application.mapper.EventMapper;
 import com.haot.coupon.application.service.CouponService;
+import com.haot.coupon.common.exceptions.CustomCouponException;
+import com.haot.coupon.common.response.enums.ErrorCode;
 import com.haot.coupon.domain.model.Coupon;
 import com.haot.coupon.domain.model.CouponEvent;
 import com.haot.coupon.domain.model.enums.CouponType;
@@ -112,6 +114,23 @@ class CouponServiceImplTest {
 
         // Then
         verify(couponIssueProducer).sendIssueUnlimitedCoupon(any()); // Kafka 메시지 발행 검증
+    }
+
+    @Test
+    @DisplayName("이벤트가 없을 시 coupon 발급 error")
+    void testCustomerIssueCoupon_EventNotFound() {
+        // Given
+        String userId = "testUser";
+        CouponCustomerCreateRequest request = TestDtoFixture.createCouponCustomerCreateRequest();
+
+        when(couponEventRepository.findByIdAndEventStatusAndIsDeleteFalse(anyString(), any()))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        CustomCouponException exception = assertThrows(CustomCouponException.class,
+                () -> couponService.customerIssueCoupon(request, userId));
+
+        assertEquals(ErrorCode.EVENT_NOT_FOUND, exception.getResCode());
     }
 
 
