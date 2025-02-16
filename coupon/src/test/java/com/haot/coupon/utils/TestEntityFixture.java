@@ -1,8 +1,5 @@
 package com.haot.coupon.utils;
 
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-
 import com.haot.coupon.domain.model.Coupon;
 import com.haot.coupon.domain.model.CouponEvent;
 import com.haot.coupon.domain.model.enums.CouponType;
@@ -10,6 +7,9 @@ import com.haot.coupon.domain.model.enums.DiscountPolicy;
 import com.haot.coupon.domain.model.enums.EventStatus;
 
 import java.time.LocalDateTime;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class TestEntityFixture {
 
@@ -47,6 +47,15 @@ public class TestEntityFixture {
             lenient().when(coupon.getTotalQuantity()).thenReturn(-1);
         }
         return coupon;
+    }
+
+    public static CouponEvent createMockExpiredCouponEvent(){
+        CouponEvent couponEvent = mock(CouponEvent.class);
+        Coupon coupon = createMockCoupon(CouponType.PRIORITY);
+        lenient().when(couponEvent.getCoupon()).thenReturn(coupon);
+        lenient().when(couponEvent.getEventStartDate()).thenReturn(LocalDateTime.now().minusDays(10));
+        lenient().when(couponEvent.getEventEndDate()).thenReturn(LocalDateTime.now().minusMinutes(1));
+        return couponEvent;
     }
 
 }
