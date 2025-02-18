@@ -8,14 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public interface CouponEventRepository extends JpaRepository<CouponEvent, String>, CouponEventCustomRepository {
 
-    boolean existsByCouponIdAndIsDeletedFalse(String CouponId);
+    boolean existsByCouponIdAndIsDeletedFalse(String couponId);
 
     List<CouponEvent> findByCouponIdAndEventStatusAndIsDeletedFalse(String id, EventStatus status);
 

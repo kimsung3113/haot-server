@@ -21,6 +21,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.ERROR(ErrorCode.INTERNAL_SERVER_EXCEPTION));
+                .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_EXCEPTION));
     }
 }

@@ -3,8 +3,6 @@ package com.haot.coupon.infrastructure.kafka;
 import com.haot.coupon.application.dto.EventClosedDto;
 import com.haot.coupon.application.kafka.CouponErrorConsumer;
 import com.haot.coupon.application.service.CouponService;
-import com.haot.coupon.common.exceptions.CustomCouponException;
-import com.haot.coupon.domain.model.enums.EventStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

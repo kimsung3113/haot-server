@@ -1,7 +1,6 @@
 package com.haot.coupon.infrastructure.kafka;
 
 import com.haot.coupon.application.dto.CouponIssueDto;
-import com.haot.coupon.application.dto.request.coupons.CouponCustomerCreateRequest;
 import com.haot.coupon.application.kafka.CouponIssueProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

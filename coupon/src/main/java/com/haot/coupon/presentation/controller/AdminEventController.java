@@ -25,7 +25,7 @@ public class AdminEventController implements AdminEventControllerDocs {
     @PostMapping
     @RoleCheck(Role.ADMIN)
     public ApiResponse<EventCreateResponse> create(@Valid @RequestBody EventCreateRequest eventCreateRequest) {
-        return ApiResponse.SUCCESS(SuccessCode.CREATE_EVENT_SUCCESS, adminEventService.create(eventCreateRequest));
+        return ApiResponse.success(SuccessCode.CREATE_EVENT_SUCCESS, adminEventService.create(eventCreateRequest));
     }
 
     // 이벤트 수정 API
@@ -37,7 +37,7 @@ public class AdminEventController implements AdminEventControllerDocs {
                                     @Valid @RequestBody EventModifyRequest eventModifyRequest) {
 
         adminEventService.modify(userId, eventId, eventModifyRequest);
-        return ApiResponse.SUCCESS(SuccessCode.MODIFY_EVENT_SUCCESS);
+        return ApiResponse.success(SuccessCode.MODIFY_EVENT_SUCCESS);
     }
 
     @ResponseStatus(HttpStatus.OK)

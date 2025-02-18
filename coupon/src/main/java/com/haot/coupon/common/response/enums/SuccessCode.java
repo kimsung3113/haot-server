@@ -24,6 +24,7 @@ public enum SuccessCode implements ResCodeIfs {
     CREATE_EVENT_SUCCESS(HttpStatus.CREATED, "4000", "이벤트가 성공적으로 생성되었습니다."),
     GET_DETAIL_EVENT_SUCCESS(HttpStatus.OK, "4000", "이벤트 상세조회 성공하였습니다."),
     MODIFY_EVENT_SUCCESS(HttpStatus.OK, "4000", "이벤트 성공적으로 수정하였습니다."),
+    SEARCH_EVENT_SUCCESS(HttpStatus.OK, "4000", "이벤트 조회 성공하였습니다."),
 
     ;
 

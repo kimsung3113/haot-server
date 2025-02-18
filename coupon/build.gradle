@@ -2,10 +2,24 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.7'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id "org.sonarqube" version "6.0.1.5171"
+	id 'jacoco' // JaCoCo 플러그인 추가
 }
 
 group = 'com.haot'
 version = '0.0.1-SNAPSHOT'
+
+jacoco {
+	toolVersion = "0.8.8" // JaCoCo 최신 버전
+}
+
+tasks.jacocoTestReport {
+	dependsOn test // 테스트 실행 후 커버리지 리포트 생성
+	reports {
+		xml.required = true  // SonarQube 는 XML 리포트를 필요로 함
+		html.required = true // HTML 리포트는 로컬에서 보기 위함 (선택 사항)
+	}
+}
 
 java {
 	toolchain {
@@ -78,6 +92,18 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.testcontainers:testcontainers-bom:1.20.2'
+
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:testcontainers'
+
+	// Testcontainers Kafka (Kafka 컨테이너 사용)
+	testImplementation 'org.testcontainers:kafka:1.19.3'
+
+	// Testcontainers PostgreSQL (PostgreSQL 컨테이너 사용)
+	testImplementation 'org.testcontainers:postgresql'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	// lombok test 의존성

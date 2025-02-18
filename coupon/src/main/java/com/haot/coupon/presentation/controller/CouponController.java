@@ -32,28 +32,28 @@ public class CouponController implements CouponControllerDocs {
     @RoleCheck({Role.ADMIN, Role.USER})
     public ApiResponse<Page<CouponReadMeResponse>> getMyCoupons(@RequestHeader("X-User-Id") String userId,
                                                                 Pageable pageable) {
-        return ApiResponse.SUCCESS(SuccessCode.GET_USER_COUPONS_SUCCESS, couponService.getMyCoupons(userId, pageable));
+        return ApiResponse.success(SuccessCode.GET_USER_COUPONS_SUCCESS, couponService.getMyCoupons(userId, pageable));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{couponId}")
     @RoleCheck({Role.ADMIN, Role.USER})
     public ApiResponse<CouponSearchResponse> getCouponDetails(@PathVariable(value = "couponId") String couponId) {
-        return ApiResponse.SUCCESS(SuccessCode.GET_DETAIL_COUPON_SUCCESS, couponService.getCouponDetails(couponId));
+        return ApiResponse.success(SuccessCode.GET_DETAIL_COUPON_SUCCESS, couponService.getCouponDetails(couponId));
     }
 
-    // TODO userId 받아야 된다.
+    // TODO userId 다시 변경하기
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/issued")
     @RoleCheck({Role.ADMIN, Role.USER})
-    public ApiResponse<Void> customerIssueCoupon(@RequestHeader("X-User-Id") String userId,
+    public ApiResponse<Void> customerIssueCoupon(// @RequestHeader("X-User-Id") String userId,
                                                  @RequestBody CouponCustomerCreateRequest request) {
 
-        //String userId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
 
         couponService.customerIssueCoupon(request, userId);
 
-        return ApiResponse.SUCCESS(SuccessCode.CUSTOMER_ISSUED_COUPON_SUCCESS);
+        return ApiResponse.success(SuccessCode.CUSTOMER_ISSUED_COUPON_SUCCESS);
     }
 
     // 유효성 검사 API
@@ -61,7 +61,7 @@ public class CouponController implements CouponControllerDocs {
     @PostMapping("/verify")
     public ApiResponse<ReservationVerifyResponse> verify(@RequestHeader("X-User-Id") String userId,
                                                          @RequestBody FeignVerifyRequest request) {
-        return ApiResponse.SUCCESS(SuccessCode.VERIFY_COUPON_SUCCESS, couponService.verify(userId, request));
+        return ApiResponse.success(SuccessCode.VERIFY_COUPON_SUCCESS, couponService.verify(userId, request));
     }
 
     // 쿠폰 Rollback API
@@ -72,7 +72,7 @@ public class CouponController implements CouponControllerDocs {
                                                        @PathVariable(value = "reservationCouponId") String reservationCouponId) {
 
         couponService.rollbackReservationCoupon(userId, role, reservationCouponId);
-        return ApiResponse.SUCCESS(SuccessCode.COUPON_RESERVATION_ROLLBACK_SUCCESS);
+        return ApiResponse.success(SuccessCode.COUPON_RESERVATION_ROLLBACK_SUCCESS);
     }
 
     // [Feign] 예약 취소 or 확정 API
@@ -83,7 +83,7 @@ public class CouponController implements CouponControllerDocs {
                                                 @RequestBody FeignConfirmReservationRequest request) {
 
         couponService.confirmReservation(reservationCouponId, request);
-        return ApiResponse.SUCCESS(SuccessCode.COUPON_RESERVATION_SUCCESS);
+        return ApiResponse.success(SuccessCode.COUPON_RESERVATION_SUCCESS);
     }
 
 
