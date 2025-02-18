@@ -92,6 +92,18 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.testcontainers:testcontainers-bom:1.20.2'
+
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:testcontainers'
+
+	// Testcontainers Kafka (Kafka 컨테이너 사용)
+	testImplementation 'org.testcontainers:kafka:1.19.3'
+
+	// Testcontainers PostgreSQL (PostgreSQL 컨테이너 사용)
+	testImplementation 'org.testcontainers:postgresql'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	// lombok test 의존성

@@ -13,6 +13,19 @@ import static org.mockito.Mockito.when;
 
 public class TestEntityFixture {
 
+    public static CouponEvent createCouponEvent(Coupon coupon){
+        return CouponEvent.builder()
+                .coupon(coupon)
+                .eventName("Redis Concurrency EventTest")
+                .description("Redis Concurrency EventTest Description")
+                .eventStartDate(LocalDateTime.now())
+                .eventEndDate(LocalDateTime.now().plusDays(1))
+                .eventStatus(EventStatus.DEFAULT)
+                .build();
+    }
+
+
+
     public static CouponEvent createMockCouponEvent(String couponEventId, CouponType couponType){
 
         CouponEvent couponEvent = mock(CouponEvent.class);
@@ -26,6 +39,21 @@ public class TestEntityFixture {
         lenient().when(couponEvent.getEventStatus()).thenReturn(EventStatus.DEFAULT);
 
         return couponEvent;
+    }
+
+    public static Coupon createPriorityCoupon(){
+        return Coupon.builder()
+                .name("Redis Concurrency testCoupon")
+                .discountAmount(5000.0)
+                .issuedQuantity(0)
+                .totalQuantity(3)
+                .discountPolicy(DiscountPolicy.AMOUNT)
+                .minAvailableAmount(30000.0)
+                .maxAvailableAmount(300000.0)
+                .availableDate(LocalDateTime.now())
+                .expiredDate(LocalDateTime.now().plusDays(15))
+                .type(CouponType.PRIORITY)
+                .build();
     }
 
     public static Coupon createMockCoupon(CouponType couponType){
