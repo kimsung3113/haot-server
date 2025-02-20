@@ -79,6 +79,7 @@ public class TestEntityFixture {
 
     public static CouponEvent createMockExpiredCouponEvent(){
         CouponEvent couponEvent = mock(CouponEvent.class);
+        lenient().when(couponEvent.getId()).thenReturn("testEventId");
         Coupon coupon = createMockCoupon(CouponType.PRIORITY);
         lenient().when(couponEvent.getCoupon()).thenReturn(coupon);
         lenient().when(couponEvent.getEventStartDate()).thenReturn(LocalDateTime.now().minusDays(10));

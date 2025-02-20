@@ -13,14 +13,6 @@ jacoco {
 	toolVersion = "0.8.8" // JaCoCo 최신 버전
 }
 
-tasks.jacocoTestReport {
-	dependsOn test // 테스트 실행 후 커버리지 리포트 생성
-	reports {
-		xml.required = true  // SonarQube 는 XML 리포트를 필요로 함
-		html.required = true // HTML 리포트는 로컬에서 보기 위함 (선택 사항)
-	}
-}
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
@@ -127,5 +119,19 @@ tasks.withType(JavaCompile) {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport // 테스트가 끝난 후 리포트를 생성하도록 설정
 }
 
+tasks.jacocoTestReport {
+	dependsOn test // 테스트 실행 후 커버리지 리포트 생성
+	reports {
+		xml.required = true  // SonarQube 는 XML 리포트를 필요로 함
+		html.required = true // HTML 리포트는 브라우저에서 보기 위함 (선택 사항)
+	}
+}
+
+sonar {
+	properties {
+		property "sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile.absolutePath
+	}
+}
